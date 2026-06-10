@@ -1,0 +1,109 @@
+from fastapi import FastAPI
+from contextlib import asynccontextmanager
+from database import create_db_and_tables
+from routers import note, user, auth, vote
+from fastapi.middleware.cors import CORSMiddleware
+from config import settings
+
+
+@asynccontextmanager
+async def lifespan(app):
+    create_db_and_tables()
+    yield
+
+app = FastAPI(lifespan=lifespan)
+
+origins = settings.allowed_origins
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+app.include_router(user.router)
+app.include_router(note.router)
+app.include_router(auth.router)
+app.include_router(vote.router)
+
+# class Person(BaseModel):
+#     name : str
+#     money : int
+
+# while True:
+#     try:
+#         conn = psycopg2.connect(host = "localhost", database = "fastapi", user = "postgres", password = "12345678", cursor_factory=RealDictCursor)
+#         cursor = conn.cursor()
+#         print("Database succesion was succesful")
+#         break
+
+#     except Exception as error:
+#         print("Connection failed")
+#         print(f"Error, {error}")
+
+
+# @app.get("/home")
+# async def home():
+#     return {"message" : "Уйобок"}
+
+# people = []
+
+# @app.post("/add")
+# async def add(person : Person):
+#     people.append(person)
+#     return person
+
+# @app.get("/getpeople")
+# async def getperson():
+#     return people
+
+# @app.get("/getperson/{id}")
+# async def getperson(id : int) -> Person:
+#     for p in people:
+#         if p.id == id:
+#             return p
+#     raise HTTPException(status_code=404, detail="Not found this id")
+
+# @app.delete("/delpost/{id}")
+# async def delpost(id : int):
+#     for p in people:
+#         if p.id == id:
+#             people.remove(p)
+#             return {"Info:" : "post was deleted"}
+#     raise HTTPException(status_code=404, detail="post wasn't found")
+
+
+# @app.get("/people", status_code=status.HTTP_200_OK)
+# async def get_people():
+#     cursor.execute("""SELECT * FROM people""")
+#     people = cursor.fetchall()
+#     return {"data" : people}
+
+
+# @app.post("/person", status_code=status.HTTP_201_CREATED)
+# async def add_person(p : Person):
+#     cursor.execute("""INSERT INTO people (name, money) VALUES (%s, %s) RETURNING * """, (p.name, p.money))
+#     new_person = cursor.fetchone()
+#     conn.commit()
+#     return {"data" : new_person}
+
+
+# @app.get("/person/{id}", status_code=status.HTTP_200_OK)
+# async def get_person(id : int):
+#     cursor.execute(
+#         """SELECT * FROM people WHERE id = (%s)""", (id,)
+#     )
+#     person = cursor.fetchone()
+#     return {"data" : person}
+
+# @app.put("/person/{id}", status_code=status.HTTP_202_ACCEPTED)
+# async def put_person(id : int, new_money : int, new_name : str):
+#     cursor.execute(
+#         """UPDATE people SET name = %s, money = %s WHERE id = %s RETURNING *""", (new_name, new_money, id)
+#     )
+#     new_person = cursor.fetchone()
+#     conn.commit()
+#     return {"data" : new_person}
+    
