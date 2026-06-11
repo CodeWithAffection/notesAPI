@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException,status,Query, APIRouter
-from database import SessionDep, create_db_and_tables, engine, get_db
+from database import create_db_and_tables, engine, get_db
 from typing import Annotated
 from sqlmodel import select, Field, SQLModel, update
 from contextlib import asynccontextmanager
