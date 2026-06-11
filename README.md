@@ -33,5 +33,5 @@ uvicorn main:app --reload
 
 All endpoints are documented in Swagger — open `http://localhost:8000/docs` after starting the server.
 
-![Swagger UI](images/swagger.png)
+![Swagger UI](image.png)
 
