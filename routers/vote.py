@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException,status,Query, APIRouter, Depends
-from database import SessionDep, create_db_and_tables, engine, get_db
+from database import create_db_and_tables, engine, get_db
 from models import Vote, User, Vote_model
 import asyncio
 from oauth_token import get_current_user
